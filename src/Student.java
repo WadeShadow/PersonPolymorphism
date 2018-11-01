@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-public class Student extends Person{
+public class Student extends Person {
     private String degree;
     private String specialization;
 
@@ -10,14 +10,14 @@ public class Student extends Person{
         this.specialization = specialization;
     }
 
-    public Student enterUniversity(Person person, String degree, String specialization){        //Factory method that can return a student from a person
-        return new Student(person.getFirstName(), person.getLastName(), person.getHeight(),person.getAge(), person.getGender(), degree, specialization);
+    public Student enterUniversity(Person person, String degree, String specialization) {        //Factory method that can return a student from a person
+        return new Student(person.getFirstName(), person.getLastName(), person.getHeight(), person.getAge(), person.getGender(), degree, specialization);
     }
 
     @Override
     public String toString() {
-        return super.toString()+", degree = '"+degree+'\''
-                +", specialization = '"+specialization+'\'';
+        return super.toString() + ", degree = '" + degree + '\''
+                + ", specialization = '" + specialization + '\'';
     }
 
     public String getDegree() {

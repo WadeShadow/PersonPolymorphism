@@ -19,9 +19,9 @@ public class Person {
     public String toString() {
         return
                 "lastname = '" + lastName + '\'' +
-                ", firstname = '" + firstName + '\'' +
-                ", height = " + height +
-                ", age = " + age ;
+                        ", firstname = '" + firstName + '\'' +
+                        ", height = " + height +
+                        ", age = " + age;
     }
 
     public String getLastName() {
@@ -52,7 +52,7 @@ public class Person {
         return height == person.height &&
                 age == person.age &&
                 Objects.equals(firstName, person.firstName) &&
-                Objects.equals(lastName, person.lastName) ;
+                Objects.equals(lastName, person.lastName);
     }
 
     @Override

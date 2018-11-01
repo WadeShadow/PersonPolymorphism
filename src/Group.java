@@ -31,7 +31,7 @@ public class Group {
         for (int i = 0; i < students.length; ++i) {
             if (students[i].equals(student)) {
                 students[i] = students[students.length - 1];     //Last student in group array replaces the one we have to delete ( In case the last is the one that has to be deleted it will be eliminated in the next line )
-                System.arraycopy(students, 0, students, 0, students.length-1);
+                System.arraycopy(students, 0, students, 0, students.length - 1);
                 /*students = Arrays.copyOf(students, students.length - 1);*/
                 return;
             }

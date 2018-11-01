@@ -17,13 +17,14 @@ public class Group {
         }
         if (students.length < groupCapacity) {
             Student[] tempStudents;
-            tempStudents = Arrays.copyOf(students, students.length+1); //As long as students are just bundles of primitives and strings we can rely on copyOf
+            tempStudents = Arrays.copyOf(students, students.length + 1); //As long as students are just bundles of primitives and strings we can rely on copyOf
             tempStudents[students.length] = newStudent;
             students = tempStudents;
             return;
         }
         throw new GroupOverflowException();
     }
+
 
     public void delete(Student student) {        //Deletes the first student with specified parameters ( We assume that there are no more than 1 equal students )
         if (student == null) return;
@@ -36,24 +37,38 @@ public class Group {
         }
     }
 
+    /**
+     * @param lastName describes required last name to look for
+     * @return Student whose last name equals to lastName argument, otherwise returns null
+     */
+    public Student findStudent(String lastName) {
+        for (Student student : students) {
+            if (student.getLastName().equalsIgnoreCase(lastName)) return student;
+        }
+        return null;
+    }
+
 
     @Override
     public String toString() {
-        Student[] tempStudents = Arrays.copyOf(students, students.length);
+        if (students != null) {
+            Student[] tempStudents = Arrays.copyOf(students, students.length);
 
-        Arrays.sort(tempStudents, (Student student1, Student student2) -> {             //Sorting structure that sorts according to last name, first name lexicographic order
-            if (student1.getLastName().compareTo(student2.getLastName()) < 0) return -1;
-            if (student1.getLastName().compareTo(student2.getLastName()) > 0) return 1;
-            if (student1.getFirstName().compareTo(student2.getLastName()) < 0) return -1;
-            if (student1.getFirstName().compareTo(student2.getFirstName()) > 0) return 1;
-            return 0;
-        });
-        StringBuilder result = new StringBuilder(groupName + '\n');
-        for (Student student : tempStudents) {
-            result.append(student.toString());
-            result.append('\n');
+            Arrays.sort(tempStudents, (Student student1, Student student2) -> {             //Sorting structure that sorts according to last name, first name lexicographic order
+                if (student1.getLastName().compareTo(student2.getLastName()) < 0) return -1;
+                if (student1.getLastName().compareTo(student2.getLastName()) > 0) return 1;
+                if (student1.getFirstName().compareTo(student2.getLastName()) < 0) return -1;
+                if (student1.getFirstName().compareTo(student2.getFirstName()) > 0) return 1;
+                return 0;
+            });
+            StringBuilder result = new StringBuilder(groupName + '\n');
+            for (Student student : tempStudents) {
+                result.append(student.toString());
+                result.append('\n');
+            }
+            return new String(result);
         }
-        return new String(result);
+        return groupName + '\n';
     }
 
     class GroupOverflowException extends Exception {

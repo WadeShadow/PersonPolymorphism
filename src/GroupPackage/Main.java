@@ -1,5 +1,10 @@
+package GroupPackage;
+
 public class Main {
     public static void main(String[] args) {
+
+        /*=========================TASK3==========================*/
+
         Student s0, s1, s2, s3, s4, s5, s6, s7, s8, s9;
         s0 = new Student("Alejandra", "Cummings", 158, 61, "female", "bachelor", "actor");
         s1 = new Student("Candace", "Beattie", 175, 63, "female", "bachelor", "interior designer");
@@ -37,6 +42,16 @@ public class Main {
         } catch (Group.GroupOverflowException | Group.AlreadyRegisteredStudentException ex) {
             System.out.println(ex);
         }                       //This one produces GroupOverflow exception
+
+
+        /*===================================TASK4============================================*/
+
+        group.sortBy("height");
+        MilitaryCommittee mCommittee = group;
+       for( Student student:mCommittee.recruit())
+           System.out.println(student);
+       group.manuallAdd();
+
 
 
     }

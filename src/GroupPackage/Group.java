@@ -1,7 +1,16 @@
-import java.util.Arrays;
+package GroupPackage;
 
-public class Group {
+import Comparators.ComparatorFactory;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
+
+public class Group implements MilitaryCommittee {
     private static final int groupCapacity = 10;
+
     private String groupName;
     private Student[] students = new Student[0];
 
@@ -9,13 +18,14 @@ public class Group {
         this.groupName = groupName;
     }
 
+
     public void add(Student newStudent) throws GroupOverflowException, AlreadyRegisteredStudentException {
         if (newStudent == null) return;
         for (Student groupStudent : students) {
             if (groupStudent.equals(newStudent))
                 throw new AlreadyRegisteredStudentException();      //If we try to add an already present student
         }
-        if (students.length < groupCapacity) {
+        if (this.hasFreePlaces()) {
             Student[] tempStudents;
             tempStudents = Arrays.copyOf(students, students.length + 1); //As long as students are just bundles of primitives and strings we can rely on copyOf
             tempStudents[students.length] = newStudent;
@@ -25,6 +35,34 @@ public class Group {
         throw new GroupOverflowException();
     }
 
+    public void manuallAdd() {
+        if(this.hasFreePlaces()) {
+            String name, lastName, gender, specialization, degree;
+            int height, age;
+            Scanner in = new Scanner(System.in);
+            System.out.print("Enter name: ");
+            name = in.nextLine();
+            System.out.print("Enter last name: ");
+            lastName = in.nextLine();
+            System.out.print("Enter gender: ");
+            gender = in.nextLine();
+            System.out.print("Enter specialization: ");
+            specialization = in.nextLine();
+            System.out.print("Enter degree: ");
+            degree = in.nextLine();
+
+            System.out.print("Enter your age(default 18 for women): ");
+            age = in.nextInt();
+            System.out.print("Enter your height in cm: ");
+            height = in.nextInt();
+
+            try {
+                this.add(new Student(name, lastName, height, age, gender, degree, specialization));
+            } catch (GroupOverflowException | AlreadyRegisteredStudentException ex) {
+                System.out.println(ex);
+            }
+        }
+    }
 
     public void delete(Student student) {        //Deletes the first student with specified parameters ( We assume that there are no more than 1 equal students )
         if (student == null) return;
@@ -47,6 +85,37 @@ public class Group {
             if (student.getLastName().equalsIgnoreCase(lastName)) return student;
         }
         return null;
+    }
+
+    public void sortByLastName() {
+        Arrays.sort(students, (Student student1, Student student2) -> {             //Sorting structure that sorts according to last name
+            if (student1.getLastName().compareTo(student2.getLastName()) < 0) return -1;
+            if (student1.getLastName().compareTo(student2.getLastName()) > 0) return 1;
+            return 0;
+        });
+    }
+
+    /**
+     * @param parameter represents names of the fields in Student or Person
+     */
+    public void sortBy(String parameter) {
+        Comparator comparator = ComparatorFactory.getComparator(parameter);      //ComparatorFactory creates a comparator for any suitable parameter name that corresponds to field names
+        Arrays.sort(students, comparator);
+    }
+
+    public Student[] recruit() {
+        ArrayList<Student> recruiters = new ArrayList<Student>();
+        for (Student student : students) {
+            if (student.getGender().equals("male") && student.getAge() >= 18) {
+                recruiters.add(student);
+            }
+        }
+        return recruiters.toArray(new Student[0]);      //By the documentation if size is not enough toArray allocates a new array with enough size
+    }
+
+    public boolean hasFreePlaces(){
+        if (students.length < groupCapacity) return true;
+        return false;
     }
 
 

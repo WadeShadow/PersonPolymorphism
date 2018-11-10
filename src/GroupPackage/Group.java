@@ -1,7 +1,9 @@
 package GroupPackage;
 
 import Comparators.ComparatorFactory;
+import sun.util.locale.ParseStatus;
 
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +23,7 @@ public class Group implements MilitaryCommittee {
 
     public void add(Student newStudent) throws GroupOverflowException, AlreadyRegisteredStudentException {
         if (newStudent == null) return;
+        if(newStudent.getAge()==0) return;
         for (Student groupStudent : students) {
             if (groupStudent.equals(newStudent))
                 throw new AlreadyRegisteredStudentException();      //If we try to add an already present student
@@ -36,7 +39,7 @@ public class Group implements MilitaryCommittee {
     }
 
     public void manuallAdd() {
-        if(this.hasFreePlaces()) {
+        if (this.hasFreePlaces()) {
             String name, lastName, gender, specialization, degree;
             int height, age;
             Scanner in = new Scanner(System.in);
@@ -113,11 +116,90 @@ public class Group implements MilitaryCommittee {
         return recruiters.toArray(new Student[0]);      //By the documentation if size is not enough toArray allocates a new array with enough size
     }
 
-    public boolean hasFreePlaces(){
+    public boolean hasFreePlaces() {
         if (students.length < groupCapacity) return true;
         return false;
     }
 
+    public void groupFileOutput(String destFile) {
+
+        String path = destFile + groupName + ".txt";
+        File groupFile = new File(path);
+        if (groupFile.exists()) {
+            System.out.println("File " + groupName + ".txt" + " already exists");
+            return;
+        }
+        try (Scanner stringScanner = new Scanner(this.toString());
+             BufferedWriter groupWriter = new BufferedWriter(new FileWriter(path))) {
+            String str;
+            while (stringScanner.hasNext()) {
+                str = stringScanner.nextLine();
+                groupWriter.write(str + '\n');
+            }
+        } catch (IOException ex) {
+            System.out.println("I/O Exception " + ex);
+        }
+
+    }
+
+    public static Group readGroupFrom(String fileSource) {
+        Group newGroup= null;
+        File groupFile = new File(fileSource);
+        if (!groupFile.exists() || !groupFile.isFile()) {
+            System.out.println("It is impossible to read from this source");
+        }
+        try (BufferedReader groupReader = new BufferedReader(new FileReader(groupFile))) {
+            String str;
+            newGroup = new Group(groupReader.readLine());
+            try {
+                while ((str = groupReader.readLine()) != null) {
+                    parseStudent(newGroup,str);
+                }
+            }catch (GroupOverflowException|AlreadyRegisteredStudentException ex){
+                System.out.println("Cannot load all these students: "+ex);
+            }
+        }catch (IOException ex){
+            System.out.println("I/O Exception happened "+ex);
+        }
+        return newGroup;
+    }
+
+    private static void parseStudent(Group group, String studentLine) throws GroupOverflowException, AlreadyRegisteredStudentException{
+        //String firstName, String lastName, int height, int age, String gender, String degree, String specialization
+        String lastname ="", firstname="", gender="", degree="", specialization="";
+        int height=0, age=0;
+        String[] groupParams = studentLine.split(",");                  //Dividing the line by commas into pieces like "lastname = 'Oswald'"
+        for (String param : groupParams) {
+            String[] variableAndValue = param.split("=");        //Then dividing into two strings like [0]=lastname, [1]='Oswald'
+            variableAndValue[1] = variableAndValue[1].replace("'", "").trim();
+            variableAndValue[0] = variableAndValue[0].trim();
+            if (variableAndValue[0].equalsIgnoreCase("lastname")) {
+                lastname = variableAndValue[1];
+            }
+            if (variableAndValue[0].equalsIgnoreCase("firstname")) {
+                firstname = variableAndValue[1];
+            }
+            if (variableAndValue[0].equalsIgnoreCase("height")) {
+                height = Integer.parseInt(variableAndValue[1]);
+            }
+            if (variableAndValue[0].equalsIgnoreCase("age")) {
+                age = Integer.parseInt(variableAndValue[1]);
+            }
+            if(variableAndValue[0].equalsIgnoreCase("gender")){
+                gender = variableAndValue[1];
+            }
+            if (variableAndValue[0].equalsIgnoreCase("degree")) {
+                degree = variableAndValue[1];
+            }
+            if (variableAndValue[0].equalsIgnoreCase("specialization")) {
+                specialization = variableAndValue[1];
+            }
+        }
+
+            group.add(new Student(firstname, lastname, height, age, gender, degree, specialization));
+
+
+    }
 
     @Override
     public String toString() {

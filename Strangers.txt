@@ -1,0 +1,11 @@
+Strangers
+lastname = 'Beattie', firstname = 'Candace', height = 175, age = 63, degree = 'bachelor', specialization = 'interior designer'
+lastname = 'Bloxham', firstname = 'Rodney', height = 189, age = 35, degree = 'bachelor', specialization = 'toxicologist'
+lastname = 'Bulloch', firstname = 'Felicia', height = 161, age = 32, degree = 'bachelor', specialization = 'tailor'
+lastname = 'Cummings', firstname = 'Alejandra', height = 158, age = 61, degree = 'bachelor', specialization = 'actor'
+lastname = 'Hill', firstname = 'Heather', height = 165, age = 30, degree = 'bachelor', specialization = 'photographer'
+lastname = 'Hutson', firstname = 'Ali', height = 186, age = 54, degree = 'bachelor', specialization = 'domestic personnel'
+lastname = 'Jackson', firstname = 'James', height = 167, age = 47, degree = 'bachelor', specialization = 'spiritist'
+lastname = 'Kevins', firstname = 'Dusty', height = 182, age = 22, degree = 'bachelor', specialization = 'industrial technician'
+lastname = 'Mendez', firstname = 'Robert', height = 168, age = 29, degree = 'bachelor', specialization = 'painter and decorator'
+lastname = 'Shaffer', firstname = 'Clara', height = 161, age = 66, degree = 'bachelor', specialization = 'loan officer'

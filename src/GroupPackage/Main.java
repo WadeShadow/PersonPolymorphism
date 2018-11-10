@@ -46,13 +46,19 @@ public class Main {
 
         /*===================================TASK4============================================*/
 
+
         group.sortBy("height");
         MilitaryCommittee mCommittee = group;
        for( Student student:mCommittee.recruit())
            System.out.println(student);
        group.manuallAdd();
 
+        /*====================================TASK5==============================================*/
 
+       group.groupFileOutput(""); //adds "groupname.txt" to the destination file name and outputs group data
+
+       Group newGroup = Group.readGroupFrom("Strangers.txt");
+        System.out.println(newGroup);
 
     }
 }
